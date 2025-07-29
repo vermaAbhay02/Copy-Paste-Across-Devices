@@ -23,7 +23,7 @@ useEffect(()=>
       if(isTyping)
         return 
       setText(data)
-      navigator.clipboard.writeText(data)
+    //  navigator.clipboard.writeText(data)
     }
    let interval= setInterval(()=>
     {
