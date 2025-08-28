@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getDatabase, ref, set } from "firebase/database";
 import { app, getData, writeData } from "./firebase";
+import './App.css'
 function App() {
   let key = window.location.pathname;
 
@@ -51,8 +52,8 @@ function App() {
   // setInterval(fetchContent,5000);
   return (
     <>
-      <div>
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div className="app-container">
+        <div className="header">
           <button
             onClick={() => {
               navigator.clipboard.writeText(text);
@@ -64,8 +65,7 @@ function App() {
         </div>
         <textarea
           disabled={!isDataFetched}
-          rows={"35"}
-          cols={"170"}
+         
           value={text}
           onChange={(e) => {
             setText(e.target.value);
