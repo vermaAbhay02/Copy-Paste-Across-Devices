@@ -1,80 +1,59 @@
 import { useEffect, useRef, useState } from "react";
-import { getDatabase, ref, set } from "firebase/database";
-import { app, getData, writeData } from "./firebase";
-import './App.css'
-function App() {
-  let key = window.location.pathname;
+import { subscribeClipboard, writeClipboard } from "./firebase";
+import "./App.css";
 
-  let [text, setText] = useState("");
+export default function App() {
+  const key = window.location.pathname.replace("/", "") || "default";
 
-  let [isDataFetched, setIsDataFetched] = useState(false);
+  const [text, setText] = useState("");
+  const [ready, setReady] = useState(false);
 
-  let [isTyping, setIsTyping] = useState(false);
+  const isTypingRef = useRef(false);
+  const debounceRef = useRef(null);
 
+  // 🔄 Real-time sync (READ)
   useEffect(() => {
-    async function readData() {
-      let data = await getData(key);
+    const unsubscribe = subscribeClipboard(key, (remoteText) => {
+      if (!isTypingRef.current) {
+        setText(remoteText);
+        setReady(true);
+      }
+    });
 
-      setIsDataFetched(true);
-      console.log("Data Fetched", data);
-      if (isTyping) return;
-      setText(data);
-      //
-    }
-    let interval = setInterval(() => {
-      readData();
-    }, 5000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, [isTyping]);
+    return unsubscribe;
+  }, [key]);
 
+  // ✍️ Debounced WRITE
   useEffect(() => {
-    console.log("Text", text);
+    if (!ready) return;
 
-    let timmer = setTimeout(
-      () => {
-        let write = async () => {
-          await writeData(key, text);
-          setIsTyping(false);
-        };
-        write();
-      },
+    clearTimeout(debounceRef.current);
 
-      1000
-    );
+    debounceRef.current = setTimeout(async () => {
+      await writeClipboard(key, text);
+      isTypingRef.current = false;
+    }, 800);
 
-    return () => {
-      clearTimeout(timmer);
-    };
-  }, [text]);
+    return () => clearTimeout(debounceRef.current);
+  }, [text, ready, key]);
 
-  // setInterval(fetchContent,5000);
   return (
-    <>
-      <div className="app-container">
-        <div className="header">
-          <button
-            onClick={() => {
-              navigator.clipboard.writeText(text);
-            }}
-          >
-            {" "}
-            Copy
-          </button>
-        </div>
-        <textarea
-          disabled={!isDataFetched}
-         
-          value={text}
-          onChange={(e) => {
-            setText(e.target.value);
-            setIsTyping(true);
-          }}
-        ></textarea>
+    <div className="app-container">
+      <div className="header">
+        <button onClick={() => navigator.clipboard.writeText(text)}>
+          Copy
+        </button>
       </div>
-    </>
+
+      <textarea
+        disabled={!ready}
+        value={text}
+        onChange={(e) => {
+          isTypingRef.current = true;
+          setText(e.target.value);
+        }}
+        placeholder="Type or paste text here..."
+      />
+    </div>
   );
 }
-
-export default App;
