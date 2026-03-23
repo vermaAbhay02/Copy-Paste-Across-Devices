@@ -1,12 +1,41 @@
-# React + Vite
+# 📋 Shared Clipboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A real-time, room-based clipboard sharing app that lets users instantly sync text across devices or with others — securely.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## Expanding the ESLint configuration
+- 🔄 Real-time text synchronization across devices  
+- 🔐 Password-protected rooms for secure sharing  
+- 🧠 Smart validation for creating and joining rooms  
+- ⚡ Debounced writes for optimized performance  
+- 🎯 Clean and intuitive user interface  
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🧑‍💻 How It Works
+
+1. Enter a room name  
+2. Choose to **create** or **join**  
+3. Set or enter a password  
+4. Start typing — changes sync instantly  
+
+---
+
+## 🛠️ Tech Stack
+
+- React  
+- React Router  
+- Firebase Firestore  
+- react-hot-toast  
+
+---
+
+## ⚙️ Run Locally
+
+```bash
+git clone <your-repo-url>
+cd <project-folder>
+npm install
+npm run dev
