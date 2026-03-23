@@ -3,6 +3,7 @@ import {
   getFirestore,
   doc,
   setDoc,
+  getDoc,
   onSnapshot,
 } from "firebase/firestore";
 
@@ -16,20 +17,33 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+const db = getFirestore(app);
 
+// get room
+export async function getClipboardDoc(key) {
+  const ref = doc(db, "Clipboard", key);
+  const snap = await getDoc(ref);
+  return snap.exists() ? snap.data() : null;
+}
+
+// create room
+export async function createRoom(key, password) {
+  const ref = doc(db, "Clipboard", key);
+  await setDoc(ref, { text: "", password });
+}
+
+// subscribe
 export function subscribeClipboard(key, callback) {
-  const docRef = doc(db, "Clipboard", key);
-  return onSnapshot(docRef, (snap) => {
+  const ref = doc(db, "Clipboard", key);
+  return onSnapshot(ref, (snap) => {
     if (snap.exists()) {
       callback(snap.data().text);
-    } else {
-      callback("");
     }
   });
 }
 
+// write
 export async function writeClipboard(key, text) {
-  const docRef = doc(db, "Clipboard", key);
-  await setDoc(docRef, { text });
+  const ref = doc(db, "Clipboard", key);
+  await setDoc(ref, { text }, { merge: true });
 }
