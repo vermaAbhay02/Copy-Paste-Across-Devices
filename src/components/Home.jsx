@@ -41,7 +41,7 @@ function Home() {
   return (
     <div className="home-wrapper">
       <div className="home-card">
-        <h1>📋 Shared Clipboard</h1>
+        <h1>📋 Easy Clipboard</h1>
 
         <p className="subtitle">
           Share text instantly across devices in real-time.
