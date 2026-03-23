@@ -1,4 +1,4 @@
-# 📋 Shared Clipboard
+# 📋 Easy Clipboard
 
 A real-time, room-based clipboard sharing app that lets users instantly sync text across devices or with others — securely.
 
