@@ -81,8 +81,19 @@ export default function Clipboard() {
     return () => clearTimeout(debounceRef.current);
   }, [text, ready, authorized, key]);
 
-  // 🔐 AUTH UI (FIXED)
+  // 🔐 AUTH UI
   if (!authorized) {
+    // ✅ Wait for Firestore check to complete
+    if (roomExists === null) {
+      return (
+        <div className="home-wrapper">
+          <div className="home-card">
+            <p className="subtitle">Loading room...</p>
+          </div>
+        </div>
+      );
+    }
+
     return (
       <div className="home-wrapper">
         <div className="home-card">
